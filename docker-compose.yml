@@ -1,0 +1,11 @@
+version: '3'
+services:
+  cronbase:
+    build: .
+    container_name: cronbase
+    ports:
+      - "3456:80"
+    env_file:
+      - .env
+    environment:
+      - CCXT_SERVER=http://192.168.3.128:13500
