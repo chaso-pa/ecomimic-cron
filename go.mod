@@ -1,4 +1,4 @@
-module github.com/chaso-pa/ecomimic_cron
+module github.com/chaso-pa/ecomimic-cron
 
 go 1.23
 

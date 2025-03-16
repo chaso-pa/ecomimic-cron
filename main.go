@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/chaso-pa/ecomimic_cron/middleware"
+	"github.com/chaso-pa/ecomimic-cron/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 )
@@ -13,7 +13,6 @@ const defaultPort = "8080"
 func main() {
 	middleware.LoadEnv()
 	middleware.ConDb()
-	middleware.ConCryptonDb()
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
