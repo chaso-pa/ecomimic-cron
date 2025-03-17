@@ -9,7 +9,7 @@ CREATE TABLE `olhcvs` (
     `close` DOUBLE NOT NULL,
     `volume` DOUBLE NOT NULL,
 
-    INDEX `timestamp_symbol`(`timestamp`, `symbol`),
+    UNIQUE INDEX `olhcvs_timestamp_symbol_key`(`timestamp`, `symbol`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -23,5 +23,6 @@ CREATE TABLE `news` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `news_url_key`(`url`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
