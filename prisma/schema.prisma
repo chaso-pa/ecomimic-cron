@@ -40,3 +40,14 @@ model News {
   @@unique([url])
   @@map("news")
 }
+
+model EconomicIndicator {
+  id        String   @id @default(cuid())
+  timestamp DateTime @map("timestamp")
+  country   String   @map("country")
+  name      String   @map("name")
+  value     Float    @map("value")
+
+  @@unique([timestamp, country, name])
+  @@map("economic_indicators")
+}
