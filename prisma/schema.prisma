@@ -51,3 +51,13 @@ model EconomicIndicator {
   @@unique([timestamp, country, name])
   @@map("economic_indicators")
 }
+
+model FredIndex {
+  id       String  @id @default(cuid())
+  crawling Boolean @default(false) @map("crawl_status")
+  country  String  @map("country")
+  symbol   String  @map("symbol")
+
+  @@unique([country, symbol])
+  @@map("fred_indices")
+}
