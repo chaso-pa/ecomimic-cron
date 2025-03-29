@@ -3,11 +3,33 @@ package services
 import (
 	"archive/zip"
 	"fmt"
+	"github.com/gocolly/colly"
 	"io"
+	"log"
 	"net/url"
 	"os"
 	"path/filepath"
+	"time"
 )
+
+const UA string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+
+func setupColly(ad string) colly.Collector {
+	c := colly.NewCollector(
+		colly.UserAgent(UA),
+	)
+
+	c.SetRequestTimeout(15 * time.Second)
+	c.OnRequest(func(r *colly.Request) {
+		log.Printf("Visiting: %s", r.URL.String())
+	})
+	c.Limit(&colly.LimitRule{
+		DomainGlob:  (ad),
+		Delay:       1 * time.Second,
+		RandomDelay: 3 * time.Second,
+	})
+	return *c
+}
 
 func DeleteDailyContents() error {
 	paths, err := filepath.Glob("ai_gens/202*")
