@@ -16,7 +16,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            dockerhub.chaso-pa.com/ecomimic_cron
+            dockerhub.chaso-pa.com/ecomimic-cron
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
