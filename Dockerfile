@@ -6,8 +6,6 @@ COPY go.mod .
 COPY middleware ./middleware
 COPY models ./models
 COPY services ./services
-COPY ai_gens ./ai_gens
-COPY prompts ./prompts
 
 ENV CGO_ENABLED=0
 
