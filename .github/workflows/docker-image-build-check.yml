@@ -1,6 +1,9 @@
 name: Docker Image build test
 
-on: push
+on:
+  push:
+    branches:
+      - "**"
 
 jobs:
   docker-build:
