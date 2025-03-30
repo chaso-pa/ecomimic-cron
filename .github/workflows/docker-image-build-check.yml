@@ -3,6 +3,7 @@ name: Docker Image build test
 on:
   push:
     branches:
+      - "**"
       - "!master"
       - "!main"
 
