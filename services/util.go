@@ -1,10 +1,9 @@
 package services
 
 import (
-	"archive/zip"
+	"crypto/sha256"
 	"fmt"
 	"github.com/gocolly/colly"
-	"io"
 	"log"
 	"net/url"
 	"os"
@@ -44,59 +43,6 @@ func DeleteDailyContents() error {
 	return nil
 }
 
-func ZipDir(dirPath string) error {
-	zipFile, err := os.Create(dirPath + ".zip")
-	if err != nil {
-		return err
-	}
-	defer zipFile.Close()
-
-	zipWriter := zip.NewWriter(zipFile)
-	defer zipWriter.Close()
-
-	files, err := filepath.Glob(dirPath + "/*")
-	if err != nil {
-		return err
-	}
-
-	for _, filename := range files {
-		if err := AddFileToZip(filename, zipWriter); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func AddFileToZip(filename string, zipWriter *zip.Writer) error {
-	fileToZip, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-	defer fileToZip.Close()
-
-	fileInfo, err := fileToZip.Stat()
-	if err != nil {
-		return err
-	}
-
-	header, err := zip.FileInfoHeader(fileInfo)
-	if err != nil {
-		return err
-	}
-
-	header.Name = filename
-	header.Method = zip.Deflate
-
-	writer, err := zipWriter.CreateHeader(header)
-	if err != nil {
-		return err
-	}
-
-	_, err = io.Copy(writer, fileToZip)
-	return err
-}
-
 func GetQueryParams(rawUrl string) (map[string]string, error) {
 	parsedURL, err := url.Parse(rawUrl)
 	if err != nil {
@@ -115,4 +61,10 @@ func RemoveLastChar(input string) string {
 		return input[:len(input)-1]
 	}
 	return input
+}
+
+func HashString(s string) string {
+	h := sha256.New()
+	h.Write([]byte(s))
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
