@@ -30,19 +30,6 @@ func setupColly(ad string) colly.Collector {
 	return *c
 }
 
-func DeleteDailyContents() error {
-	paths, err := filepath.Glob("ai_gens/202*")
-	if err != nil {
-		return err
-	}
-
-	for _, path := range paths {
-		os.RemoveAll(path)
-	}
-
-	return nil
-}
-
 func GetQueryParams(rawUrl string) (map[string]string, error) {
 	parsedURL, err := url.Parse(rawUrl)
 	if err != nil {
