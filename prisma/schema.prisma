@@ -61,3 +61,39 @@ model FredIndex {
   @@unique([country, symbol])
   @@map("fred_indices")
 }
+
+model Article {
+  id          String   @id @default(cuid())
+  url         String   @map("url")
+  title       String   @map("title") @db.Text
+  content     String   @map("content") @db.Text
+  contentHash String   @map("content_hash")
+  published   DateTime @map("published")
+  crawledAt   DateTime @map("crawled_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([contentHash])
+  @@map("articles")
+}
+
+model ArticleDomain {
+  id                       String  @id @default(cuid())
+  domain                   String  @map("domain")
+  url                      String  @map("url")
+  articleUrlBase           String  @map("article_url_base")
+  crawlStatus              Boolean @map("crawl_status")
+  containerSelector        String  @map("container_selector")
+  articleLinkSelector      String  @map("article_link_selector")
+  articleContainerSelector String  @map("article_container_selector")
+  titleSelector            String  @map("title_selector")
+  contentSelector          String  @map("content_selector")
+  publishedAtSelector      String  @map("published_at_selector")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([url])
+  @@map("article_domains")
+}
