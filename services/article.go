@@ -66,7 +66,7 @@ func saveArticle(url string, ad *models.ArticleDomain) error {
 			URL:         articleURL,
 			Title:       title,
 			Content:     content,
-			ContentHash: HashString(content),
+			ContentHash: HashString(title),
 			Published:   publishedAt,
 			CrawledAt:   time.Now(),
 			CreatedAt:   time.Now(),
