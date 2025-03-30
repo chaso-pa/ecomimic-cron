@@ -6,8 +6,6 @@ import (
 	"github.com/gocolly/colly"
 	"log"
 	"net/url"
-	"os"
-	"path/filepath"
 	"time"
 )
 
