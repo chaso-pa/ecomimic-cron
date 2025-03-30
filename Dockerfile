@@ -14,8 +14,6 @@ RUN go build -o server .
 FROM alpine:3.20 AS runtime
 RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates
 ENV GIN_MODE=release
-COPY ai_gens ./ai_gens
-COPY prompts ./prompts
 COPY --from=build /go/src/server ./
 
 EXPOSE 80/tcp
