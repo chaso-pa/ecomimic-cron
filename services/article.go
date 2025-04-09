@@ -58,7 +58,10 @@ func saveArticle(url string, ad *models.ArticleDomain) error {
 		articleURL := e.Request.URL.String()
 		publishedAt, err := parseTime(e.ChildAttr(ad.PublishedAtSelector, "datetime"))
 		if err != nil {
-			return
+			publishedAt, err = parseTime(e.ChildText(ad.PublishedAtSelector))
+		}
+		if err != nil {
+			publishedAt = time.Now()
 		}
 
 		article := models.Article{
