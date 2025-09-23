@@ -97,3 +97,18 @@ model ArticleDomain {
   @@unique([url])
   @@map("article_domains")
 }
+
+model FxReport {
+  id          String @id @default(cuid())
+  symbol      String @map("symbol")
+  price       Float  @map("price")
+  technical   String @map("technical") @db.Text
+  fundamental String @map("fundamental") @db.Text
+  summary     String @map("summary") @db.Text
+  confidence  Int    @map("confidence")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("fx_reports")
+}
