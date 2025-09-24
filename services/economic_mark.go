@@ -90,7 +90,7 @@ func CrawlEconomicCalendar() error {
 
 // ParseDateTime parses date, time, and id to return time.Time with JST timezone
 func parseDateTime(date, timeStr, id string) (time.Time, error) {
-	jst, _ := time.LoadLocation("Asia/Tokyo")
+	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
 
 	// Extract year from id (yyyydd+increment+_emg format)
 	if len(id) < 6 {
