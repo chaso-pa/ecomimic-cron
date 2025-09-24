@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/chaso-pa/ecomimic-cron/middleware"
 	"gorm.io/gorm/clause"
-	"time"
 )
 
 type Article struct {
