@@ -113,3 +113,20 @@ model FxReport {
 
   @@map("fx_reports")
 }
+
+model EconomicMark {
+  id          String   @id @default(cuid())
+  publishedAt DateTime @map("published_at")
+  country     String   @map("country")
+  title       String   @map("title")
+  importance  Int      @map("importance")
+  estimate    String   @map("estimate")
+  result      String   @map("result")
+  pastresult  String   @map("past_result")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([title, publishedAt])
+  @@map("economic_marks")
+}

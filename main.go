@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -24,6 +25,7 @@ func main() {
 	c := cron.New()
 
 	c.AddFunc("32 */2 * * *", func() { services.CrawlAllArticles() })
+	c.AddFunc("0 * * * *", func() { services.CrawlEconomicCalendar() })
 
 	c.Start()
 
@@ -36,9 +38,16 @@ func main() {
 		ctx.JSON(http.StatusOK, gin.H{"status": "OK"})
 	})
 
-	if os.Getenv("GIN_MODE") != "release" {
-		r.Run("localhost:" + port)
-	} else {
-		r.Run(":" + port)
+	r.GET("/test", func(c *gin.Context) {
+		err := services.CrawlEconomicCalendar()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"status": "OK"})
+	})
+
+	if err := r.Run(":" + port); err != nil {
+		log.Fatal("Failed to start server:", err)
 	}
 }
