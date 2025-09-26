@@ -25,7 +25,7 @@ func main() {
 	c := cron.New()
 
 	c.AddFunc("32 */2 * * *", func() { services.CrawlAllArticles() })
-	c.AddFunc("0 * * * *", func() { services.CrawlEconomicCalendar() })
+	c.AddFunc("*/5 * * * *", func() { services.CrawlEconomicCalendar() })
 
 	c.Start()
 
