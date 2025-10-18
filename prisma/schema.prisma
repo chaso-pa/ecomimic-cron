@@ -130,3 +130,14 @@ model EconomicMark {
   @@unique([title, publishedAt])
   @@map("economic_marks")
 }
+
+model Sentiment {
+  id      String @id @default(cuid())
+  summary String @map("summary") @db.Text
+  rate    Int    @map("rate")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("sentiments")
+}
