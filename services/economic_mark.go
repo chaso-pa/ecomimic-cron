@@ -16,7 +16,8 @@ import (
 func CrawlEconomicCalendar() error {
 	var err error
 	var marks []*models.EconomicMark
-	targetUrl := "https://www.gaikaex.com/gaikaex/mark/calendar/"
+	curDate := time.Now()
+	targetUrl := "https://www.gaikaex.com/gaikaex/mark/calendar/index.php?date" + curDate.Format("20060102")
 	c := setupColly("gaikaex.com")
 
 	c.OnHTML("#mainContents", func(e *colly.HTMLElement) {
@@ -30,9 +31,8 @@ func CrawlEconomicCalendar() error {
 			firstTd := el.ChildText("td:first-child")
 			if ValidateDateTime(firstTd) {
 				date = el.ChildText("td:nth-child(1)")
-				id := el.Attr("id")
 				timeStr := el.ChildText("td:nth-child(2)")
-				publishedAt, _ := parseDateTime(date, timeStr, id)
+				publishedAt, _ := parseDateTime(date, timeStr, curDate)
 				country := el.ChildAttr("td:nth-child(3) img", "alt")
 				title := el.ChildText("td:nth-child(4)")
 				importance, _ := parseImportance(el.ChildText("td:nth-child(5)"))
@@ -53,9 +53,8 @@ func CrawlEconomicCalendar() error {
 				marks = append(marks, &mark)
 
 			} else {
-				id := el.Attr("id")
 				timeStr := el.ChildText("td:nth-child(1)")
-				publishedAt, _ := parseDateTime(date, timeStr, id)
+				publishedAt, _ := parseDateTime(date, timeStr, curDate)
 				country := el.ChildText("td:nth-child(2)")
 				title := el.ChildText("td:nth-child(3)")
 				importance, _ := parseImportance(el.ChildText("td:nth-child(4)"))
@@ -89,19 +88,9 @@ func CrawlEconomicCalendar() error {
 }
 
 // ParseDateTime parses date, time, and id to return time.Time with JST timezone
-func parseDateTime(date, timeStr, id string) (time.Time, error) {
+func parseDateTime(date string, timeStr string, curDate time.Time) (time.Time, error) {
 	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
-
-	// Extract year from id (yyyydd+increment+_emg format)
-	if len(id) < 6 {
-		return time.Time{}, fmt.Errorf("invalid id format")
-	}
-
-	yearStr := id[:4]
-	year, err := strconv.Atoi(yearStr)
-	if err != nil {
-		return time.Time{}, fmt.Errorf("invalid year in id: %v", err)
-	}
+	year := curDate.Year()
 
 	// Parse date (m/d(w) format)
 	datePattern := `^(\d{1,2})/(\d{1,2})\([月火水木金土日]\)$`
@@ -114,6 +103,10 @@ func parseDateTime(date, timeStr, id string) (time.Time, error) {
 	month, err := strconv.Atoi(matches[1])
 	if err != nil {
 		return time.Time{}, fmt.Errorf("invalid month: %v", err)
+	}
+
+	if int(curDate.Month()) == 12 && month == 1 {
+		year = year + 1
 	}
 
 	day, err := strconv.Atoi(matches[2])
